@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterfly Pose Analysis</title>
+</head>
+<body>
+    <h1>Butterfly Pose Analysis</h1>
+
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <h2>Processed Image:</h2>
+    <img id="resultImage" width="500" alt="Processed image will appear here">
+
+    <h2>Angles:</h2>
+    <pre id="angleData">Angle data will appear here</pre>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const resultImage = document.getElementById('resultImage');
+        const angleData = document.getElementById('angleData');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                setInterval(analyzeFrame, 100);  // Analyze frame every 500ms
+            })
+            .catch(err => console.error("Error accessing the camera", err));
+
+        async function analyzeFrame() {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 640, 480);
+            const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
+
+            const response = await fetch('https://10.5.49.148:5000/hand', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'image=' + encodeURIComponent('data:image/jpeg;base64,' + base64Image)
+            });
+
+            const data = await response.json();
+            resultImage.src = data.image;
+            angleData.textContent = JSON.stringify(data.angles, null, 2);
+        }
+    </script>
+</body>
+</html>
