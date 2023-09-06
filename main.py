@@ -6,12 +6,12 @@ from datetime import datetime
 import json
 import time
 import S_Pose
-# from flask_cors import CORS
 from flask import send_from_directory
+from flask_cors import CORS
 
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/butterfly', methods=['POST'])
 def route_butterfly():
@@ -112,4 +112,6 @@ def index():
     return send_from_directory('static', 'index.html')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0' ,debug=True, port=5000)
+    context = ('cert.pem', 'key.pem')  # Certificate and key
+    app.run(host='0.0.0.0', debug=True, port=5000
+            , ssl_context=context)
