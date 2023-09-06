@@ -6,8 +6,12 @@ from datetime import datetime
 import json
 import time
 import S_Pose
+# from flask_cors import CORS
+from flask import send_from_directory
+
 
 app = Flask(__name__)
+# CORS(app)
 
 @app.route('/butterfly', methods=['POST'])
 def route_butterfly():
@@ -103,5 +107,9 @@ def route_hand():
         'image': "data:image/jpeg;base64," + frame_encoded,
     })
 
+@app.route('/')
+def index():
+    return send_from_directory('static', 'index.html')
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0' ,debug=True, port=5000)
