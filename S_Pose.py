@@ -235,11 +235,11 @@ def legtrain(frame):
         gc.collect()
     return frame, angles
 
+mpHands = mp.solutions.hands
+hands = mpHands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5, min_tracking_confidence=0.5, model_complexity=1)
+mpDraw = mp.solutions.drawing_utils
 
 def hand(frame):
-    mpHands = mp.solutions.hands
-    hands = mpHands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5, min_tracking_confidence=0.5, model_complexity=1)
-    mpDraw = mp.solutions.drawing_utils
 
     imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)

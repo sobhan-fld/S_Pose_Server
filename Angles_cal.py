@@ -90,7 +90,7 @@ def waist(results, mpPose):
 def elbow_shoulder(results, mpPose):
 
     if not results.pose_landmarks:
-        return 0, 0, 0, 0
+        return None, None, None, None
     right_shoulder_landmark = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_SHOULDER]
     right_elbow_landmark = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_ELBOW]
     right_wrist_landmark = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_WRIST]
